@@ -20,7 +20,7 @@ wifi:
 
 stepper:
   - platform: uln2003
-    id: feed_stepper
+    id: cat_feeder_stepper
     pin_a: D1
     pin_b: D3
     pin_c: D2
@@ -32,15 +32,15 @@ stepper:
 
 button:
   - platform: template
-    id: feed_button
-    name: "Feed"
+    id: feed_cat_button
+    name: "Feed Cat"
     on_press:
       then:
         - stepper.report_position:
-            id: feed_stepper
+            id: cat_feeder_stepper
             position: 0
         - stepper.set_target:
-            id: feed_stepper
+            id: cat_feeder_stepper
             target: 40
 
 time:
@@ -48,4 +48,4 @@ time:
     on_time:
       - cron: "* * /6 * * *"
         then:
-          - button.press: feed_button
+          - button.press: feed_cat_button
