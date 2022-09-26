@@ -46,6 +46,8 @@ button:
 time:
   - platform: homeassistant
     on_time:
-      - cron: "* * /6 * * *"
+      - seconds: 0
+        minutes: 0
+        hours: /6
         then:
           - button.press: feed_cat_button
