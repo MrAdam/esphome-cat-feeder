@@ -20,7 +20,7 @@ wifi:
 
 stepper:
   - platform: uln2003
-    id: cat_feeder_stepper
+    id: cat_feeder
     pin_a: D1
     pin_b: D3
     pin_c: D2
@@ -30,18 +30,23 @@ stepper:
     acceleration: inf
     deceleration: inf
 
-button:
+switch:
   - platform: template
-    id: feed_cat_button
+    id: feed_cat
     name: "Feed Cat"
-    on_press:
-      then:
-        - stepper.report_position:
-            id: cat_feeder_stepper
-            position: 0
-        - stepper.set_target:
-            id: cat_feeder_stepper
-            target: 40
+    turn_on_action:
+      - switch.template.publish:
+          id: feed_cat
+          state: ON
+      - stepper.report_position:
+          id: cat_feeder
+          position: 0
+      - stepper.set_target:
+          id: cat_feeder
+          target: 40
+      - switch.template.publish:
+          id: feed_cat
+          state: OFF
 
 time:
   - platform: homeassistant
@@ -50,4 +55,4 @@ time:
         minutes: 0
         hours: /6
         then:
-          - button.press: feed_cat_button
+          - switch.turn_on: feed_cat
