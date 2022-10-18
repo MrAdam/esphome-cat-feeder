@@ -53,6 +53,6 @@ time:
     on_time:
       - seconds: 0
         minutes: 0
-        hours: /6
+        hours: /5
         then:
           - switch.turn_on: feed_cat
