@@ -3,6 +3,7 @@ esphome:
 
 esp8266:
   board: d1_mini_pro
+  restore_from_flash: yes
 
 # Enable logging
 logger:
@@ -20,32 +21,52 @@ wifi:
 
 stepper:
   - platform: uln2003
-    id: cat_feeder
+    id: feeder_stepper
     pin_a: D1
     pin_b: D3
     pin_c: D2
     pin_d: D4
     max_speed: 250 steps/s
-    sleep_when_done: true
+    sleep_when_done: yes
     acceleration: inf
     deceleration: inf
 
+globals:
+  - id: feeder_enabled
+    type: bool
+    restore_value: yes
+    initial_value: "true"
+
 switch:
   - platform: template
-    id: feed_cat
+    id: feeder_enabled_switch
+    name: "Cat Feeder Enabled"
+    icon: mdi:toggle-switch
+    lambda: return id(feeder_enabled);
+    turn_on_action:
+      - globals.set:
+          id: feeder_enabled
+          value: "true"
+    turn_off_action:
+      - globals.set:
+          id: feeder_enabled
+          value: "false"
+  - platform: template
+    id: feeder_feed_switch
     name: "Feed Cat"
+    icon: mdi:food
     turn_on_action:
       - switch.template.publish:
-          id: feed_cat
+          id: feeder_feed_switch
           state: ON
       - stepper.report_position:
-          id: cat_feeder
+          id: feeder_stepper
           position: 0
       - stepper.set_target:
-          id: cat_feeder
+          id: feeder_stepper
           target: 40
       - switch.template.publish:
-          id: feed_cat
+          id: feeder_feed_switch
           state: OFF
 
 time:
@@ -55,4 +76,8 @@ time:
         minutes: 0
         hours: /5
         then:
-          - switch.turn_on: feed_cat
+          - if:
+              condition:
+                lambda: return id(feeder_enabled);
+              then:
+                - switch.turn_on: feeder_feed_switch
