@@ -32,24 +32,24 @@ stepper:
     deceleration: inf
 
 globals:
-  - id: feeder_enabled
+  - id: feeder_timer_enabled
     type: bool
     restore_value: yes
     initial_value: "true"
 
 switch:
   - platform: template
-    id: feeder_enabled_switch
-    name: "Cat Feeder Enabled"
+    id: feeder_timer_enabled_switch
+    name: "Cat Feeder Timer Enabled"
     icon: mdi:toggle-switch
-    lambda: return id(feeder_enabled);
+    lambda: return id(feeder_timer_enabled);
     turn_on_action:
       - globals.set:
-          id: feeder_enabled
+          id: feeder_timer_enabled
           value: "true"
     turn_off_action:
       - globals.set:
-          id: feeder_enabled
+          id: feeder_timer_enabled
           value: "false"
   - platform: template
     id: feeder_feed_switch
@@ -78,6 +78,6 @@ time:
         then:
           - if:
               condition:
-                lambda: return id(feeder_enabled);
+                lambda: return id(feeder_timer_enabled);
               then:
                 - switch.turn_on: feeder_feed_switch
