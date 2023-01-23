@@ -18,6 +18,8 @@ ota:
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
+  power_save_mode: none
+  fast_connect: true
 
 stepper:
   - platform: uln2003
@@ -40,8 +42,8 @@ globals:
 switch:
   - platform: template
     id: feeder_timer_enabled_switch
-    name: "Cat Feeder Timer Enabled"
-    icon: mdi:toggle-switch
+    name: "Feeder Timer"
+    icon: mdi:timer
     lambda: return id(feeder_timer_enabled);
     turn_on_action:
       - globals.set:
@@ -51,23 +53,21 @@ switch:
       - globals.set:
           id: feeder_timer_enabled
           value: "false"
+
+button:
   - platform: template
-    id: feeder_feed_switch
+    id: feeder_feed_button
     name: "Feed Cat"
-    icon: mdi:food
-    turn_on_action:
-      - switch.template.publish:
-          id: feeder_feed_switch
-          state: ON
+    icon: mdi:bowl
+    on_press:
       - stepper.report_position:
           id: feeder_stepper
           position: 0
       - stepper.set_target:
           id: feeder_stepper
           target: 40
-      - switch.template.publish:
-          id: feeder_feed_switch
-          state: OFF
+      - homeassistant.event:
+          event: esphome.feeder_feed_button_pressed
 
 time:
   - platform: homeassistant
@@ -80,4 +80,4 @@ time:
               condition:
                 lambda: return id(feeder_timer_enabled);
               then:
-                - switch.turn_on: feeder_feed_switch
+                - button.press: feeder_feed_button
