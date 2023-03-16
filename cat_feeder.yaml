@@ -21,6 +21,18 @@ wifi:
   power_save_mode: none
   fast_connect: true
 
+i2c:
+  sda: D5
+  scl: D6
+  scan: false
+
+sensor:
+  - platform: vl53l0x
+    name: "Food Consumed"
+    filters:
+      - lambda: return x * 100;
+    unit_of_measurement: "cm"
+
 stepper:
   - platform: uln2003
     id: feeder_stepper
@@ -74,7 +86,7 @@ time:
     on_time:
       - seconds: 0
         minutes: 0
-        hours: /5
+        hours: /6
         then:
           - if:
               condition:
