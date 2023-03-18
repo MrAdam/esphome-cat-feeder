@@ -28,10 +28,10 @@ i2c:
 
 sensor:
   - platform: vl53l0x
-    name: "Food Consumed"
+    name: "Food Left"
     filters:
-      - lambda: return x * 100;
-    unit_of_measurement: "cm"
+      - lambda: return 100 - (x - 0.05) / (0.3 - 0.05) * 100;
+    unit_of_measurement: "%"
 
 stepper:
   - platform: uln2003
