@@ -1,9 +1,11 @@
 # Automatic Cat Feeder
+
 This is the code for my automatic cat feeder, made using ESPHome and with inspiration from various other projects online.
 
 ![PXL_20221003_142624042-COLLAGE](https://user-images.githubusercontent.com/297282/196499367-99382542-8ceb-4ca7-a8a6-a6676998cd13.jpg)
 
 ## Hardware
+
 - Wood
 - 2 x Pipe Holder bracket (for holding the dispenser)
 - Drain Valve (I used one made for bathtubs, and sawed out the metal grate)
@@ -17,3 +19,4 @@ This is the code for my automatic cat feeder, made using ESPHome and with inspir
 - [L298N Stepper Motor controller](https://arduinotech.dk/shop/l298n-stepper-motor-controller/)
 - [Shaft Coupler / Flexible Coupling](https://arduinotech.dk/shop/flex-kobling-til-3d-printer-cnc-fraeser/)
 - [Dry-Food Dispenser](https://www.amazon.com/gp/product/B0009MGQUC/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1)
+- [VL53L0X Time-of-Flight Module](https://arduinotech.dk/shop/distance-sensor-gy-vl53l0xv2-vl53l0x-time-of-flight-module/)
