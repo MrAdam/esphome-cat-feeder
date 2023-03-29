@@ -52,6 +52,8 @@ globals:
     initial_value: "true"
 
 switch:
+  - platform: restart
+    name: "Restart Cat Feeder"
   - platform: template
     id: feeder_timer_enabled_switch
     name: "Feeder Timer"
