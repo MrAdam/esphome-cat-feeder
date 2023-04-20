@@ -24,13 +24,14 @@ wifi:
 i2c:
   sda: D5
   scl: D6
-  scan: false
 
 sensor:
   - platform: vl53l0x
     name: "Food Left"
     filters:
-      - lambda: return 100 - (x - 0.05) / (0.3 - 0.05) * 100;
+      - calibrate_linear:
+          - 0.05 -> 100
+          - 0.3 -> 0
     unit_of_measurement: "%"
 
 stepper:
@@ -45,34 +46,11 @@ stepper:
     acceleration: inf
     deceleration: inf
 
-globals:
-  - id: feeder_timer_enabled
-    type: bool
-    restore_value: yes
-    initial_value: "true"
-
-switch:
-  - platform: restart
-    name: "Restart Cat Feeder"
-  - platform: template
-    id: feeder_timer_enabled_switch
-    name: "Feeder Timer"
-    icon: mdi:timer
-    lambda: return id(feeder_timer_enabled);
-    turn_on_action:
-      - globals.set:
-          id: feeder_timer_enabled
-          value: "true"
-    turn_off_action:
-      - globals.set:
-          id: feeder_timer_enabled
-          value: "false"
-
 button:
   - platform: template
-    id: feeder_feed_button
-    name: "Feed Cat"
-    icon: mdi:bowl
+    id: feeder_button
+    name: "Activate Cat Feeder"
+    icon: mdi:rotate-left
     on_press:
       - stepper.report_position:
           id: feeder_stepper
@@ -80,8 +58,6 @@ button:
       - stepper.set_target:
           id: feeder_stepper
           target: 40
-      - homeassistant.event:
-          event: esphome.feeder_feed_button_pressed
 
 time:
   - platform: homeassistant
@@ -90,8 +66,4 @@ time:
         minutes: 0
         hours: /6
         then:
-          - if:
-              condition:
-                lambda: return id(feeder_timer_enabled);
-              then:
-                - button.press: feeder_feed_button
+          - button.press: feeder_button
