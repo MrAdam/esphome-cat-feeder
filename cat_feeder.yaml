@@ -57,7 +57,7 @@ button:
           position: 0
       - stepper.set_target:
           id: feeder_stepper
-          target: 40
+          target: 50
 
 time:
   - platform: homeassistant
